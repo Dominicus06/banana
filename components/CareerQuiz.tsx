@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronRight, ArrowLeft, Share2, Download } from 'lucide-react';
+import { ChevronRight, ArrowLeft, Share2, Download, Building2, CheckCircle } from 'lucide-react';
 
 interface Question {
   id: number;
@@ -23,6 +23,44 @@ interface CareerResult {
   title: string;
   description: string;
   organizations: string[];
+  color: string;
+}
+
+interface CompanyPersonalityQuestion {
+  id: number;
+  question: string;
+  options: {
+    text: string;
+    traits: {
+      innovative: number;
+      collaborative: number;
+      structured: number;
+      autonomous: number;
+      impactFocused: number;
+      growthOriented: number;
+    };
+  }[];
+}
+
+interface Company {
+  id: string;
+  name: string;
+  description: string;
+  culture: string;
+  values: string[];
+  workStyle: string;
+  benefits: string[];
+  location: string;
+  size: string;
+  industry: string;
+  traits: {
+    innovative: number;
+    collaborative: number;
+    structured: number;
+    autonomous: number;
+    impactFocused: number;
+    growthOriented: number;
+  };
   color: string;
 }
 
@@ -148,8 +186,158 @@ const careerResults: Record<string, CareerResult> = {
   }
 };
 
+const companyPersonalityQuestions: CompanyPersonalityQuestion[] = [
+  {
+    id: 1,
+    question: "What type of work environment brings out your best performance?",
+    options: [
+      { text: "Fast-paced, innovative spaces with cutting-edge technology", traits: { innovative: 3, collaborative: 2, structured: 0, autonomous: 2, impactFocused: 1, growthOriented: 3 } },
+      { text: "Collaborative open spaces with team interaction", traits: { innovative: 1, collaborative: 3, structured: 1, autonomous: 0, impactFocused: 2, growthOriented: 2 } },
+      { text: "Organized, process-driven environments with clear hierarchies", traits: { innovative: 0, collaborative: 1, structured: 3, autonomous: 1, impactFocused: 1, growthOriented: 1 } },
+      { text: "Flexible spaces where I can work independently", traits: { innovative: 2, collaborative: 0, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 2 } }
+    ]
+  },
+  {
+    id: 2,
+    question: "What motivates you most in your daily work?",
+    options: [
+      { text: "Creating breakthrough solutions and experimenting", traits: { innovative: 3, collaborative: 1, structured: 0, autonomous: 2, impactFocused: 2, growthOriented: 2 } },
+      { text: "Building strong relationships and team success", traits: { innovative: 1, collaborative: 3, structured: 1, autonomous: 0, impactFocused: 2, growthOriented: 2 } },
+      { text: "Meeting targets and following proven systems", traits: { innovative: 0, collaborative: 1, structured: 3, autonomous: 1, impactFocused: 1, growthOriented: 1 } },
+      { text: "Having ownership and making my own decisions", traits: { innovative: 2, collaborative: 0, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 2 } }
+    ]
+  },
+  {
+    id: 3,
+    question: "How do you prefer to approach new challenges?",
+    options: [
+      { text: "Experiment with new methods and disrupt the status quo", traits: { innovative: 3, collaborative: 1, structured: 0, autonomous: 2, impactFocused: 2, growthOriented: 3 } },
+      { text: "Collaborate with team members to find solutions", traits: { innovative: 1, collaborative: 3, structured: 1, autonomous: 0, impactFocused: 2, growthOriented: 2 } },
+      { text: "Follow established procedures and best practices", traits: { innovative: 0, collaborative: 1, structured: 3, autonomous: 1, impactFocused: 1, growthOriented: 1 } },
+      { text: "Tackle them independently with full autonomy", traits: { innovative: 2, collaborative: 0, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 2 } }
+    ]
+  },
+  {
+    id: 4,
+    question: "What kind of company mission resonates with you?",
+    options: [
+      { text: "Disrupting industries with innovative technology", traits: { innovative: 3, collaborative: 1, structured: 0, autonomous: 2, impactFocused: 2, growthOriented: 3 } },
+      { text: "Creating positive social or environmental impact", traits: { innovative: 2, collaborative: 2, structured: 1, autonomous: 1, impactFocused: 3, growthOriented: 2 } },
+      { text: "Delivering reliable, high-quality services", traits: { innovative: 0, collaborative: 2, structured: 3, autonomous: 1, impactFocused: 2, growthOriented: 1 } },
+      { text: "Enabling individual freedom and creativity", traits: { innovative: 2, collaborative: 1, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 2 } }
+    ]
+  },
+  {
+    id: 5,
+    question: "What's your ideal relationship with management?",
+    options: [
+      { text: "Minimal oversight, maximum freedom to innovate", traits: { innovative: 3, collaborative: 1, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 2 } },
+      { text: "Regular check-ins and collaborative decision-making", traits: { innovative: 1, collaborative: 3, structured: 2, autonomous: 0, impactFocused: 2, growthOriented: 2 } },
+      { text: "Clear direction and structured feedback", traits: { innovative: 0, collaborative: 1, structured: 3, autonomous: 0, impactFocused: 1, growthOriented: 1 } },
+      { text: "Trust-based autonomy with accountability", traits: { innovative: 2, collaborative: 1, structured: 1, autonomous: 3, impactFocused: 2, growthOriented: 2 } }
+    ]
+  },
+  {
+    id: 6,
+    question: "What type of growth opportunities appeal to you?",
+    options: [
+      { text: "Learning cutting-edge technologies and methods", traits: { innovative: 3, collaborative: 1, structured: 0, autonomous: 2, impactFocused: 1, growthOriented: 3 } },
+      { text: "Developing leadership and team collaboration skills", traits: { innovative: 1, collaborative: 3, structured: 2, autonomous: 0, impactFocused: 2, growthOriented: 2 } },
+      { text: "Advancing through clearly defined career paths", traits: { innovative: 0, collaborative: 1, structured: 3, autonomous: 1, impactFocused: 1, growthOriented: 2 } },
+      { text: "Building diverse skills across multiple areas", traits: { innovative: 2, collaborative: 1, structured: 0, autonomous: 3, impactFocused: 1, growthOriented: 3 } }
+    ]
+  }
+];
+
+const companies: Company[] = [
+  {
+    id: "tech-innovator",
+    name: "TechVision Innovations",
+    description: "A cutting-edge AI and machine learning startup revolutionizing how businesses leverage data.",
+    culture: "Fast-paced, innovative, and experimental. We embrace failure as learning and encourage bold thinking.",
+    values: ["Innovation First", "Continuous Learning", "Data-Driven Decisions", "Calculated Risk-Taking"],
+    workStyle: "Hybrid with flexible hours, autonomous project ownership, latest tech stack",
+    benefits: ["Equity options", "Unlimited learning budget", "Remote work flexibility", "Latest tech equipment"],
+    location: "Vilnius, Lithuania (Hybrid)",
+    size: "50-100 employees",
+    industry: "Technology / AI",
+    traits: { innovative: 9, collaborative: 6, structured: 3, autonomous: 8, impactFocused: 7, growthOriented: 9 },
+    color: "#F2A900"
+  },
+  {
+    id: "social-impact",
+    name: "Impact Global",
+    description: "A mission-driven organization creating sustainable solutions for social and environmental challenges.",
+    culture: "Purpose-driven, collaborative, and compassionate. We believe in collective impact and community building.",
+    values: ["Social Impact", "Sustainability", "Collaboration", "Transparency", "Diversity & Inclusion"],
+    workStyle: "Collaborative team environment, consensus-based decision making, flexible work arrangements",
+    benefits: ["Mission-driven work", "Work-life balance", "Professional development", "Meaningful impact"],
+    location: "Vilnius, Lithuania",
+    size: "100-200 employees",
+    industry: "Non-Profit / Social Enterprise",
+    traits: { innovative: 5, collaborative: 9, structured: 5, autonomous: 4, impactFocused: 10, growthOriented: 6 },
+    color: "#D22730"
+  },
+  {
+    id: "consulting-excellence",
+    name: "Strategic Partners Consulting",
+    description: "A premier management consulting firm helping enterprises transform and optimize their operations.",
+    culture: "Professional, structured, and excellence-oriented. We value expertise, precision, and delivering results.",
+    values: ["Excellence", "Client Success", "Continuous Improvement", "Professional Development", "Integrity"],
+    workStyle: "Structured project timelines, clear deliverables, mentorship programs, office-based collaboration",
+    benefits: ["Competitive salary", "Career advancement", "International projects", "Mentorship programs"],
+    location: "Vilnius, Lithuania",
+    size: "200-500 employees",
+    industry: "Consulting / Professional Services",
+    traits: { innovative: 4, collaborative: 7, structured: 9, autonomous: 3, impactFocused: 6, growthOriented: 7 },
+    color: "#76232F"
+  },
+  {
+    id: "creative-agency",
+    name: "Pixel & Beyond Creative",
+    description: "An award-winning creative agency crafting extraordinary brand experiences and digital products.",
+    culture: "Creative, autonomous, and inspiring. We trust our team to create magic with minimal constraints.",
+    values: ["Creative Freedom", "Artistic Excellence", "Client Partnership", "Work-Life Balance", "Innovation"],
+    workStyle: "Flexible remote work, autonomous project management, creative freedom, collaborative brainstorming",
+    benefits: ["Flexible schedule", "Remote work", "Creative tools budget", "Team retreats", "Portfolio building"],
+    location: "Remote-First (Vilnius Hub)",
+    size: "20-50 employees",
+    industry: "Creative / Design",
+    traits: { innovative: 8, collaborative: 5, structured: 2, autonomous: 9, impactFocused: 5, growthOriented: 7 },
+    color: "#FFB81C"
+  },
+  {
+    id: "fintech-scale",
+    name: "FinFlow Technologies",
+    description: "A rapidly scaling fintech company building the future of digital payments and financial services.",
+    culture: "Growth-focused, data-driven, and agile. We move fast, iterate quickly, and scale with purpose.",
+    values: ["Customer First", "Data-Driven", "Rapid Innovation", "Scalability", "Financial Inclusion"],
+    workStyle: "Agile methodology, cross-functional teams, hybrid work, results-oriented culture",
+    benefits: ["Stock options", "Competitive compensation", "Learning & development", "Modern office space"],
+    location: "Vilnius, Lithuania (Hybrid)",
+    size: "150-300 employees",
+    industry: "FinTech / Finance",
+    traits: { innovative: 8, collaborative: 7, structured: 6, autonomous: 6, impactFocused: 7, growthOriented: 10 },
+    color: "#D0D3D4"
+  },
+  {
+    id: "research-institute",
+    name: "Baltic Innovation Research Institute",
+    description: "A leading research institution advancing knowledge in biotechnology and sustainable technologies.",
+    culture: "Academic, collaborative, and curiosity-driven. We prioritize deep thinking and meaningful discoveries.",
+    values: ["Scientific Excellence", "Collaboration", "Knowledge Sharing", "Ethical Research", "Innovation"],
+    workStyle: "Flexible research schedules, autonomous project direction, collaborative peer reviews",
+    benefits: ["Research funding", "Publication support", "Conference travel", "Academic freedom", "Flexible hours"],
+    location: "Vilnius, Lithuania",
+    size: "75-150 employees",
+    industry: "Research / Biotechnology",
+    traits: { innovative: 7, collaborative: 8, structured: 6, autonomous: 7, impactFocused: 8, growthOriented: 6 },
+    color: "#76232F"
+  }
+];
+
 export default function CareerQuiz() {
-  const [currentState, setCurrentState] = useState<'start' | 'quiz' | 'results'>('start');
+  const [currentState, setCurrentState] = useState<'start' | 'quiz' | 'results' | 'companyQuiz' | 'companyResults'>('start');
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [scores, setScores] = useState<Record<string, number>>({
@@ -162,6 +350,37 @@ export default function CareerQuiz() {
   });
   const [topCareers, setTopCareers] = useState<string[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  
+  // Company matching states
+  const [companyQuestion, setCompanyQuestion] = useState(0);
+  const [companyAnswers, setCompanyAnswers] = useState<number[]>([]);
+  const [companyTraits, setCompanyTraits] = useState<Record<string, number>>({
+    innovative: 0,
+    collaborative: 0,
+    structured: 0,
+    autonomous: 0,
+    impactFocused: 0,
+    growthOriented: 0
+  });
+  const [matchedCompanies, setMatchedCompanies] = useState<Company[]>([]);
+
+  // Load saved data from localStorage on mount
+  useEffect(() => {
+    const savedCareerResults = localStorage.getItem('careerQuizResults');
+    const savedCompanyResults = localStorage.getItem('companyMatchResults');
+    
+    if (savedCareerResults) {
+      const parsed = JSON.parse(savedCareerResults);
+      setTopCareers(parsed.topCareers);
+      setScores(parsed.scores);
+    }
+    
+    if (savedCompanyResults) {
+      const parsed = JSON.parse(savedCompanyResults);
+      setMatchedCompanies(parsed.matchedCompanies);
+      setCompanyTraits(parsed.traits);
+    }
+  }, []);
 
   const startQuiz = () => {
     setIsAnimating(true);
@@ -201,6 +420,14 @@ export default function CareerQuiz() {
           .map(([career]) => career);
         
         setTopCareers(sortedCareers);
+        
+        // Save career results to localStorage
+        localStorage.setItem('careerQuizResults', JSON.stringify({
+          topCareers: sortedCareers,
+          scores: newScores,
+          timestamp: new Date().toISOString()
+        }));
+        
         setCurrentState('results');
       }
       setIsAnimating(false);
@@ -269,7 +496,123 @@ export default function CareerQuiz() {
     }
   };
 
+  // Company matching functions
+  const startCompanyQuiz = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentState('companyQuiz');
+      setCompanyQuestion(0);
+      setCompanyAnswers([]);
+      setCompanyTraits({
+        innovative: 0,
+        collaborative: 0,
+        structured: 0,
+        autonomous: 0,
+        impactFocused: 0,
+        growthOriented: 0
+      });
+      setIsAnimating(false);
+    }, 300);
+  };
+
+  const handleCompanyAnswer = (optionIndex: number) => {
+    if (isAnimating) return;
+    
+    const newAnswers = [...companyAnswers, optionIndex];
+    setCompanyAnswers(newAnswers);
+    
+    const question = companyPersonalityQuestions[companyQuestion];
+    const selectedOption = question.options[optionIndex];
+    const newTraits = { ...companyTraits };
+    
+    Object.entries(selectedOption.traits).forEach(([key, value]) => {
+      newTraits[key as keyof typeof newTraits] += value;
+    });
+    
+    setCompanyTraits(newTraits);
+    setIsAnimating(true);
+    
+    setTimeout(() => {
+      if (companyQuestion < companyPersonalityQuestions.length - 1) {
+        setCompanyQuestion(companyQuestion + 1);
+      } else {
+        // Calculate company matches
+        const matches = companies.map(company => {
+          let matchScore = 0;
+          let totalPossible = 0;
+          
+          Object.entries(newTraits).forEach(([trait, userValue]) => {
+            const companyValue = company.traits[trait as keyof typeof company.traits];
+            const maxValue = Math.max(userValue, companyValue);
+            const difference = Math.abs(userValue - companyValue);
+            matchScore += (maxValue - difference);
+            totalPossible += maxValue;
+          });
+          
+          return {
+            company,
+            matchPercentage: totalPossible > 0 ? (matchScore / totalPossible) * 100 : 0
+          };
+        })
+        .sort((a, b) => b.matchPercentage - a.matchPercentage)
+        .slice(0, 3)
+        .map(item => ({ ...item.company, matchPercentage: item.matchPercentage }));
+        
+        setMatchedCompanies(matches as Company[]);
+        
+        // Save to localStorage
+        localStorage.setItem('companyMatchResults', JSON.stringify({
+          matchedCompanies: matches,
+          traits: newTraits,
+          timestamp: new Date().toISOString()
+        }));
+        
+        setCurrentState('companyResults');
+      }
+      setIsAnimating(false);
+    }, 300);
+  };
+
+  const goBackCompanyQuiz = () => {
+    if (companyQuestion > 0) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCompanyQuestion(companyQuestion - 1);
+        setCompanyAnswers(companyAnswers.slice(0, -1));
+        
+        const newTraits = {
+          innovative: 0,
+          collaborative: 0,
+          structured: 0,
+          autonomous: 0,
+          impactFocused: 0,
+          growthOriented: 0
+        };
+        
+        companyAnswers.slice(0, -1).forEach((answerIndex, questionIndex) => {
+          const question = companyPersonalityQuestions[questionIndex];
+          const option = question.options[answerIndex];
+          Object.entries(option.traits).forEach(([key, value]) => {
+            newTraits[key as keyof typeof newTraits] += value;
+          });
+        });
+        
+        setCompanyTraits(newTraits);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
+
+  const backToCareerResults = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentState('results');
+      setIsAnimating(false);
+    }, 300);
+  };
+
   const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const companyProgress = ((companyQuestion + 1) / companyPersonalityQuestions.length) * 100;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -367,9 +710,18 @@ export default function CareerQuiz() {
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4 justify-center mb-12">
               <button
+                onClick={startCompanyQuiz}
+                className="group flex items-center gap-2 px-8 py-4 text-lg font-semibold text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+                style={{ backgroundColor: '#D22730' }}
+              >
+                <Building2 className="w-5 h-5" />
+                Find Your Company
+                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
                 onClick={resetQuiz}
-                className="px-6 py-3 rounded-full text-white hover:shadow-lg transition-all"
-                style={{ backgroundColor: '#76232F' }}
+                className="px-6 py-3 rounded-full bg-white border-2 text-gray-700 hover:border-gray-400 hover:shadow-md transition-all"
+                style={{ borderColor: '#D0D3D4' }}
               >
                 Take Quiz Again
               </button>
@@ -414,6 +766,219 @@ export default function CareerQuiz() {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+
+        {/* Company Personality Quiz Screen */}
+        {currentState === 'companyQuiz' && (
+          <div className={`transition-all duration-300 ${isAnimating ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
+            {/* Progress Bar */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">Question {companyQuestion + 1} of {companyPersonalityQuestions.length}</span>
+                <span className="text-sm text-gray-600">{Math.round(companyProgress)}% complete</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="h-2 rounded-full transition-all duration-500"
+                  style={{ backgroundColor: '#D22730', width: `${companyProgress}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Back Button */}
+            <div className="flex items-center justify-between mb-6">
+              {companyQuestion > 0 ? (
+                <button
+                  onClick={goBackCompanyQuiz}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Previous Question
+                </button>
+              ) : (
+                <button
+                  onClick={backToCareerResults}
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Career Results
+                </button>
+              )}
+            </div>
+
+            {/* Question */}
+            <div className="mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                <Building2 className="w-8 h-8" style={{ color: '#D22730' }} />
+                <h2 className="text-2xl font-bold text-gray-800">Company Personality Match</h2>
+              </div>
+              
+              <h3 className="text-3xl font-bold text-gray-800 mb-8 leading-relaxed">
+                {companyPersonalityQuestions[companyQuestion].question}
+              </h3>
+              
+              <div className="space-y-4">
+                {companyPersonalityQuestions[companyQuestion].options.map((option, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleCompanyAnswer(index)}
+                    className="w-full p-6 text-left bg-white rounded-xl border-2 border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg text-gray-700 group-hover:text-gray-900">
+                        {option.text}
+                      </span>
+                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:translate-x-1 transition-all" />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Company Results Screen */}
+        {currentState === 'companyResults' && (
+          <div className={`transition-all duration-300 ${isAnimating ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'}`}>
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Building2 className="w-10 h-10" style={{ color: '#D22730' }} />
+                <h2 className="text-4xl font-bold text-gray-800">Your Perfect Company Matches</h2>
+              </div>
+              <p className="text-xl text-gray-600">Based on your work style and preferences, these companies are your best cultural fit:</p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-4 justify-center mb-12">
+              <button
+                onClick={backToCareerResults}
+                className="flex items-center gap-2 px-6 py-3 bg-white border-2 rounded-full text-gray-700 hover:border-gray-400 hover:shadow-md transition-all"
+                style={{ borderColor: '#D0D3D4' }}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Career Results
+              </button>
+              <button
+                onClick={resetQuiz}
+                className="px-6 py-3 rounded-full text-white hover:shadow-lg transition-all"
+                style={{ backgroundColor: '#76232F' }}
+              >
+                Start Over
+              </button>
+            </div>
+
+            {/* Company Match Cards */}
+            <div className="space-y-6">
+              {matchedCompanies.map((company: any, index) => (
+                <div
+                  key={company.id}
+                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-200 border-l-4"
+                  style={{ borderLeftColor: company.color }}
+                >
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: company.color }}
+                        />
+                        <span className="text-sm font-semibold text-gray-500">
+                          #{index + 1} MATCH
+                        </span>
+                        {company.matchPercentage && (
+                          <span className="ml-auto text-2xl font-bold" style={{ color: company.color }}>
+                            {Math.round(company.matchPercentage)}% Match
+                          </span>
+                        )}
+                      </div>
+                      
+                      <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                        {company.name}
+                      </h3>
+                      
+                      <p className="text-gray-600 mb-4 text-lg">
+                        {company.description}
+                      </p>
+
+                      <div className="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4" style={{ color: company.color }} />
+                            Company Culture
+                          </h4>
+                          <p className="text-gray-600 text-sm leading-relaxed">
+                            {company.culture}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                            <CheckCircle className="w-4 h-4" style={{ color: company.color }} />
+                            Work Style
+                          </h4>
+                          <p className="text-gray-600 text-sm leading-relaxed">
+                            {company.workStyle}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-2">Core Values</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {company.values.map((value: string, idx: number) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 rounded-full text-sm font-medium text-white"
+                                style={{ backgroundColor: company.color }}
+                              >
+                                {value}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-2">Benefits & Perks</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {company.benefits.map((benefit: string, idx: number) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700"
+                              >
+                                {benefit}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Location</p>
+                            <p className="text-sm font-medium text-gray-800">{company.location}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Company Size</p>
+                            <p className="text-sm font-medium text-gray-800">{company.size}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Industry</p>
+                            <p className="text-sm font-medium text-gray-800">{company.industry}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 p-6 bg-gray-50 rounded-xl border border-gray-200">
+              <p className="text-sm text-gray-600 text-center">
+                💾 Your results have been saved locally. You can return to this page anytime to review your matches.
+              </p>
             </div>
           </div>
         )}

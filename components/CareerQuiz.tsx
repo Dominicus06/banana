@@ -23,8 +23,6 @@ interface CareerResult {
   title: string;
   description: string;
   organizations: string[];
-  culturalFit: string;
-  personality: string;
   color: string;
 }
 
@@ -116,48 +114,36 @@ const careerResults: Record<string, CareerResult> = {
     title: "Creative Innovator",
     description: "You thrive in environments that value imagination, artistic expression, and innovative thinking. Your ideal role involves bringing new ideas to life and inspiring others through creative solutions.",
     organizations: ["Design agencies", "Tech startups", "Media companies", "Innovation labs", "Creative consultancies"],
-    culturalFit: "Organizations with flexible work styles, emphasis on creativity, collaborative brainstorming, and tolerance for experimentation. Look for companies that celebrate unique perspectives and artistic expression.",
-    personality: "You're driven by self-expression, aesthetic beauty, and the desire to create something meaningful. You work best with autonomy and in environments that encourage thinking outside the box.",
     color: "#F2A900"
   },
   analytical: {
     title: "Strategic Analyst",
     description: "You excel at breaking down complex problems, analyzing data, and creating systematic solutions. Your ideal role involves research, strategy development, and evidence-based decision making.",
     organizations: ["Consulting firms", "Research institutions", "Financial services", "Government agencies", "Technology companies"],
-    culturalFit: "Organizations that value data-driven decisions, systematic approaches, and intellectual rigor. Look for companies with strong research cultures and emphasis on continuous learning.",
-    personality: "You're motivated by understanding how things work, solving puzzles, and making logical connections. You thrive in structured environments that reward thoroughness and accuracy.",
     color: "#76232F"
   },
   leadership: {
     title: "Visionary Leader",
     description: "You naturally inspire and guide others toward common goals. Your ideal role involves strategic planning, team development, and driving organizational change.",
     organizations: ["Growing companies", "Non-profits", "Management consulting", "Corporate leadership", "Social enterprises"],
-    culturalFit: "Organizations that value strong leadership, clear vision, and collaborative team dynamics. Look for companies undergoing growth or transformation where leadership skills are highly valued.",
-    personality: "You're energized by bringing out the best in others, creating shared vision, and driving positive change. You work best in dynamic environments with opportunities for influence.",
     color: "#D22730"
   },
   helping: {
     title: "People-Centered Professional",
     description: "You're passionate about making a direct positive impact on individuals' lives. Your ideal role involves supporting, teaching, or advocating for others in meaningful ways.",
     organizations: ["Healthcare", "Education", "Non-profits", "Coaching/counseling", "Community organizations"],
-    culturalFit: "Organizations with strong missions focused on human welfare, collaborative cultures, and emphasis on work-life balance. Look for companies that prioritize employee well-being and social impact.",
-    personality: "You're driven by empathy, service to others, and creating positive change in people's lives. You thrive in supportive environments that value human connection and personal growth.",
     color: "#FFB81C"
   },
   technical: {
     title: "Technical Problem Solver",
     description: "You excel at building, optimizing, and maintaining complex systems. Your ideal role involves hands-on technical work, continuous learning, and solving challenging technical problems.",
     organizations: ["Technology companies", "Engineering firms", "Research labs", "Manufacturing", "Software development"],
-    culturalFit: "Organizations that invest in cutting-edge technology, value technical excellence, and provide opportunities for skill development. Look for companies with strong engineering cultures.",
-    personality: "You're motivated by understanding how things work, building efficient solutions, and mastering complex technical skills. You thrive in environments that reward expertise and innovation.",
     color: "#D0D3D4"
   },
   entrepreneurial: {
     title: "Innovation Catalyst",
     description: "You're driven to create new ventures, identify opportunities, and build something from the ground up. Your ideal role involves strategic thinking, risk-taking, and business development.",
     organizations: ["Startups", "Venture capital", "Business development", "Innovation departments", "Consulting"],
-    culturalFit: "Organizations that embrace calculated risk-taking, rapid iteration, and entrepreneurial thinking. Look for companies that encourage initiative and reward innovative approaches.",
-    personality: "You're energized by opportunity identification, strategic thinking, and building new solutions. You thrive in fast-paced environments with autonomy and growth potential.",
     color: "#000000"
   }
 };
@@ -381,13 +367,6 @@ export default function CareerQuiz() {
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4 justify-center mb-12">
               <button
-                onClick={shareResults}
-                className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 rounded-full text-gray-700 hover:border-gray-400 hover:shadow-md transition-all"
-              >
-                <Share2 className="w-4 h-4" />
-                Share Results
-              </button>
-              <button
                 onClick={resetQuiz}
                 className="px-6 py-3 rounded-full text-white hover:shadow-lg transition-all"
                 style={{ backgroundColor: '#76232F' }}
@@ -429,20 +408,6 @@ export default function CareerQuiz() {
                         <h4 className="font-semibold text-gray-800 mb-2">Suitable Organizations:</h4>
                         <p className="text-gray-600 text-sm">
                           {career.organizations.join(", ")}
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">Cultural Fit:</h4>
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {career.culturalFit}
-                        </p>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-semibold text-gray-800 mb-2">Your Personality:</h4>
-                        <p className="text-gray-600 text-sm leading-relaxed">
-                          {career.personality}
                         </p>
                       </div>
                     </div>
